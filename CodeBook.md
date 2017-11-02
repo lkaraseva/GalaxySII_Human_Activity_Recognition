@@ -44,7 +44,7 @@ Regular expressions were used within grep FUN to identify required variable, i.e
 Returned vector was applied to test_and_train_df to filter out other variables. The resulting data frame named as filtered_full_df1.
 
 ## Step 3 - Uses descriptive activity names to name the activities in the data set
-filtered_full_df1 was merged with activity_labels in order to match numbers with activity names. The names were populated but the numbers were dropped, resulting in creation of another intermediate data frame called human_activities_full. 
+filtered_full_df1 was merged with activity_labels in order to match numbers with activity names. The names were populated but the numbers were dropped, resulting in creation of another intermediate data frame called >human_activities_full. 
 
 ## Step 4 - Appropriately labels the data set with descriptive variable names.
 A series of editing actions was applied to variable names in human_activities_full. Included: elaboration on abbriviated terms, getting rid of special symbols like "-" and "(), lowering all cases.
