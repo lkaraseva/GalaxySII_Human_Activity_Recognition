@@ -24,7 +24,7 @@ Below you can find a detailed description of how all of the scripts work.
   y_test<-read.table("./test/y_test.txt")`
 ```
 ## Step 1
-> Merges the training and the test sets to create one data set
+#### Merges the training and the test sets to create one data set
 
 1. `'train/X_train.txt': Training set` and `'train/y_train.txt': Training labels` are merged together in order to identify types of activities tracked
 2. `'test/X_test.txt': Test set` and `'test/y_test.txt': Test labels` are merged together in order to identify types of activities tracked
@@ -42,7 +42,7 @@ Below you can find a detailed description of how all of the scripts work.
   test_and_train_df<-rbind.data.frame(test_df, train_df)
   ```    
 ## Step 2
-> Extracts only the measurements on the mean and standard deviation for each measurement
+#### Extracts only the measurements on the mean and standard deviation for each measurement
 
 Regular expressions are used within `grep` FUN to identify required variable, i.e. ones that included `mean()` and `std()` obesrvations.
 Returned vector was applied to `test_and_train_df` to filter out other variables. The resulting data frame named as `filtered_full_df1`.
@@ -56,16 +56,47 @@ Returned vector was applied to `test_and_train_df` to filter out other variables
   filtered_full_df1<-full_df[,required_columns_vector]
   ```
 ## Step 3
-> Uses descriptive activity names to name the activities in the data set
+#### Uses descriptive activity names to name the activities in the data set
 
-`filtered_full_df1` was merged with `activity_labels` in order to match numbers with activity names. The names were populated but the numbers were dropped, resulting in creation of another intermediate data frame called `human_activities_full`. 
+`filtered_full_df1` is merged with `activity_labels` in order to match numbers with activity names. The names were populated but the numbers were dropped, resulting in creation of another intermediate data frame called `human_activities_full`.
+```{r eval=FALSE}
+library(dplyr)
+  human_activities_full <- filtered_full_df1 %>%
+                          merge(activity_labels) %>%
+                          select(68,2:67) %>%
+                          rename(activity=V2)
+```
 
 ## Step 4 
-> Appropriately labels the data set with descriptive variable names
+#### Appropriately labels the data set with descriptive variable names
 
 A series of editing actions was applied to variable names in `human_activities_full`. Included: elaboration on abbriviated terms, getting rid of special symbols like "-" and "(), lowering all cases.
 
+```{r eval=FALSE}
+  NewVarNames <- gsub("-","",names(human_activities_full))
+  NewVarNames <- gsub("^t","timesignalof",NewVarNames)
+  NewVarNames <- gsub("^f","frequencysignalof",NewVarNames)
+  NewVarNames <- gsub("[()]","",NewVarNames)
+  NewVarNames <- gsub("mean","average",NewVarNames)
+  NewVarNames <- gsub("std","standarddeviation",NewVarNames)
+  NewVarNames <- gsub("Body","bodymotion",NewVarNames)
+  NewVarNames <- gsub("Gravity","gravitationalmotion",NewVarNames)
+  NewVarNames <- gsub("Acc","fromaccelerometer",NewVarNames)
+  NewVarNames <- gsub("Gyro","fromgyroscope",NewVarNames)
+  NewVarNames <- gsub("Mag","magnitude",NewVarNames)
+  NewVarNames <- tolower (NewVarNames)
+  names(human_activities_full)<-NewVarNames
+```
 ## Step 5
-> From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject
+#### From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject
 
 `human_activities_full` has been grouped by activity types. The data frame has been summarized by activity types using mean FUN. The resulting and final data frame was called `human_activities_summary`.
+
+```{r eval=FALSE}
+human_activities_summary<- human_activities_full %>% 
+                group_by(activity) %>%
+                summarise_all(funs(mean(., na.rm=TRUE))) %>%
+                as.data.frame()
+  
+  print(human_activities_summary)
+```
