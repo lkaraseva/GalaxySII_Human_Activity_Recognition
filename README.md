@@ -6,12 +6,12 @@ The script `run_analysis.R` is logicaly devided into 6 steps (Step 0 - Step 6).
 Below you can find a detailed description of how all of the scripts work.
 
 ## Step 0 
-> Sets working directory and read files required for analysis
+> Sets working directory
 #### Note! In order to avoid any errors you need to change the path to `UCI HAR Dataset` folder according to the location on your computer
 ```{r eval=FALSE}
   setwd("C:\\Users\\ekaraseva\\Desktop\\data\\UCI HAR Dataset")
 ```  
-> Read files required for analysis
+> Reads files required for analysis
 
 ```{r eval=FALSE}  
   activity_labels<-read.table("activity_labels.txt")
@@ -26,16 +26,35 @@ Below you can find a detailed description of how all of the scripts work.
 ## Step 1
 > Merges the training and the test sets to create one data set
 
-1. `'train/X_train.txt': Training set` and `'train/y_train.txt': Training labels` were merged together in order to identify types of activities tracked
-2. `'test/X_test.txt': Test set` and `'test/y_test.txt': Test labels` were merged together in order to identify types of activities tracked
+1. `'train/X_train.txt': Training set` and `'train/y_train.txt': Training labels` are merged together in order to identify types of activities tracked
+2. `'test/X_test.txt': Test set` and `'test/y_test.txt': Test labels` are merged together in order to identify types of activities tracked
 3. Data Sets from points 1 and 2 above were binded together in order to create one data set `test_and_train_df`
 
+> Renames variables in test and train data sets according to the list of all features
+  ```{r eval=FALSE}  
+  names(X_test)<-features[,2]
+  names(X_train)<-features[,2]
+  ```
+> Binds data sets with the lables
+  ```{r eval=FALSE}  
+  test_df<-cbind.data.frame(y_test, X_test)
+  train_df<-cbind.data.frame(y_train, X_train)
+  test_and_train_df<-rbind.data.frame(test_df, train_df)
+  ```    
 ## Step 2
 > Extracts only the measurements on the mean and standard deviation for each measurement
 
-Regular expressions were used within `grep` FUN to identify required variable, i.e. ones that included `mean()` and `std()` obesrvations.
+Regular expressions are used within `grep` FUN to identify required variable, i.e. ones that included `mean()` and `std()` obesrvations.
 Returned vector was applied to `test_and_train_df` to filter out other variables. The resulting data frame named as `filtered_full_df1`.
 
+> Locates column numbers that contain mean or standard deviation measurements by exact match to `mean()` and `std()`
+  ```{r eval=FALSE}  
+  required_columns_vector<-grep("V1|\\bmean()\\b|\\bstd()\\b", names(test_and_train_df),ignore.case = TRUE)
+  ```
+> Creates a filterted data frame that contains only required columns/measurments
+  ```{r eval=FALSE}  
+  filtered_full_df1<-full_df[,required_columns_vector]
+  ```
 ## Step 3
 > Uses descriptive activity names to name the activities in the data set
 
