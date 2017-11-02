@@ -7,9 +7,13 @@ Below you can find a detailed description of how all of the scripts work.
 
 ## Step 0 
 > Sets working directory and read files required for analysis
-
+#### Note! In order to avoid any errors you need to change the path to `UCI HAR Dataset` folder according to the location on your computer
 ```{r eval=FALSE}
   setwd("C:\\Users\\ekaraseva\\Desktop\\data\\UCI HAR Dataset")
+```  
+> Read files required for analysis
+
+```{r eval=FALSE}  
   activity_labels<-read.table("activity_labels.txt")
   features<-read.table("features.txt")
   subject_train<-read.table("./train/subject_train.txt")
