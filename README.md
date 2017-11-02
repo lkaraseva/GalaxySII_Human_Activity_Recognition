@@ -1,6 +1,6 @@
 # Introduction
-The purpose of this project is to demonstrate your ability to collect, work with, and clean a data set.
-Please refer to the CodeBook.md for more details about the initial dataset.
+The purpose of this project is to demonstrate the ability to collect, work with, and clean a data set.
+Please refer to the CodeBook.md for more details about input data sets and their variables.
 
 The script `run_analysis.R` is logicaly devided into 6 steps (Step 0 - Step 6).
 Below you can find a detailed description of how all of the scripts work.
@@ -8,8 +8,7 @@ Below you can find a detailed description of how all of the scripts work.
 ## Step 0 
 > Sets working directory and read files required for analysis
 
-<!-- -->
-setwd("C:\\Users\\ekaraseva\\Desktop\\data\\UCI HAR Dataset")
+`setwd("C:\\Users\\ekaraseva\\Desktop\\data\\UCI HAR Dataset")
   activity_labels<-read.table("activity_labels.txt")
   features<-read.table("features.txt")
   subject_train<-read.table("./train/subject_train.txt")
@@ -17,7 +16,7 @@ setwd("C:\\Users\\ekaraseva\\Desktop\\data\\UCI HAR Dataset")
   y_train<-read.table("./train/y_train.txt")
   subject_test<-read.table("./test/subject_test.txt")
   X_test<-read.table("./test/X_test.txt")
-  y_test<-read.table("./test/y_test.txt")
+  y_test<-read.table("./test/y_test.txt")`
 
 ## Step 1
 > Merges the training and the test sets to create one data set
