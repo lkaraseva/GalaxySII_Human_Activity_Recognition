@@ -3,6 +3,7 @@ The purpose of this project is to demonstrate my ability to collect, work with, 
 The goal is to prepare tidy data that can be used for later analysis
 
 > Data Source
+
 The data is coming from Machine Learning Repository UCI:
 http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones
 Data sets have been downloaded using the following link:
