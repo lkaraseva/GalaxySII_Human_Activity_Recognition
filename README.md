@@ -8,7 +8,8 @@ Below you can find a detailed description of how all of the scripts work.
 ## Step 0 
 > Sets working directory and read files required for analysis
 
-`setwd("C:\\Users\\ekaraseva\\Desktop\\data\\UCI HAR Dataset")
+```{r eval=FALSE}
+  setwd("C:\\Users\\ekaraseva\\Desktop\\data\\UCI HAR Dataset")
   activity_labels<-read.table("activity_labels.txt")
   features<-read.table("features.txt")
   subject_train<-read.table("./train/subject_train.txt")
@@ -17,7 +18,7 @@ Below you can find a detailed description of how all of the scripts work.
   subject_test<-read.table("./test/subject_test.txt")
   X_test<-read.table("./test/X_test.txt")
   y_test<-read.table("./test/y_test.txt")`
-
+```
 ## Step 1
 > Merges the training and the test sets to create one data set
 
