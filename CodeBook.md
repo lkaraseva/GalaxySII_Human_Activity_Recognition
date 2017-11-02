@@ -38,7 +38,7 @@ The complete list of variables of each feature vector is available in 'features.
 
 # Transformations Performed
 
-### Packages, punctions and commands
+### Packages, functions and commands applied
 * dplyr package
 * setwd
 * read.table
@@ -59,9 +59,9 @@ The complete list of variables of each feature vector is available in 'features.
 ## Step 1
 > Merges the training and the test sets to create one data set
 
-1. 'train/X_train.txt': Training set and 'train/y_train.txt': Training labels were merged together in order to identify types of activities tracked
-2. 'test/X_test.txt': Test set and 'test/y_test.txt': Test labels were merged together in order to identify types of activities tracked
-3. Data Sets from 1.1 and 1.2 were binded together in order to create one data set `test_and_train_df`
+1. `'train/X_train.txt': Training set` and `'train/y_train.txt': Training labels` were merged together in order to identify types of activities tracked
+2. `'test/X_test.txt': Test set` and `'test/y_test.txt': Test labels` were merged together in order to identify types of activities tracked
+3. Data Sets from points 1 and 2 above were binded together in order to create one data set `test_and_train_df`
 
 ## Step 2
 > Extracts only the measurements on the mean and standard deviation for each measurement
