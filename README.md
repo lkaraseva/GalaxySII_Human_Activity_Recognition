@@ -2,7 +2,7 @@
 The purpose of this project is to demonstrate the ability to collect, work with, and clean a data set.
 Please refer to the CodeBook.md for more details about input data sets and their variables.
 
-The script `run_analysis.R` is logicaly devided into 6 steps (Step 0 - Step 6).
+The script `run_analysis.R` is logicaly devided into 6 steps (Step 0 - Step 5).
 Below you can find a detailed description of how all of the scripts work.
 
 ## Step 0 
