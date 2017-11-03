@@ -15,27 +15,32 @@
   #rename variables in test and train data sets according to the list of all features
   names(X_test)<-features[,2]
   names(X_train)<-features[,2]
+  names(subject_test)<-"subject"
+  names(subject_train)<-"subject"
+  names(y_test)<-"activity"
+  names(y_train)<-"activity"
   
   #bind data sets with the lables
-  test_df<-cbind.data.frame(y_test, X_test)
-  train_df<-cbind.data.frame(y_train, X_train)
+  test_df<-cbind.data.frame(subject_test, y_test, X_test)
+  train_df<-cbind.data.frame(subject_train, y_train, X_train)
   test_and_train_df<-rbind.data.frame(test_df, train_df)
   
 ## Step 2 - Extracts only the measurements on the mean and standard deviation for each measurement
   
   #locate column numbers that contain mean or standard deviation measurements by exact match to 
   # "mean()" and "std()"
-  required_columns_vector<-grep("V1|\\bmean()\\b|\\bstd()\\b", names(test_and_train_df),ignore.case = TRUE)
+  required_columns_vector<-grep("subject|activity|\\bmean()\\b|\\bstd()\\b", names(test_and_train_df),ignore.case = TRUE)
   #create a filterted data frame that contains only required columns/measurments
-  filtered_full_df1<-full_df[,required_columns_vector]
+  filtered_full_df1<-test_and_train_df[,required_columns_vector]
   
 ## Step 3 - Uses descriptive activity names to name the activities in the data set
   
   library(dplyr)
   human_activities_full <- filtered_full_df1 %>%
-                          merge(activity_labels) %>%
-                          select(68,2:67) %>%
-                          rename(activity=V2)
+                          merge(activity_labels,by.x="activity",by.y="V1",all=TRUE) %>%
+                          select(2,69,3:68) %>%
+                          rename(activity=V2) %>%
+                          arrange(subject,activity)
   
 ##  Step 4 - Appropriately labels the data set with descriptive variable names 
   
@@ -57,11 +62,13 @@
 ## independent tidy data set with the average of each variable for each activity and each subject
   
   human_activities_summary<- human_activities_full %>% 
-                group_by(activity) %>%
+                group_by(subject, activity) %>%
                 summarise_all(funs(mean(., na.rm=TRUE))) %>%
                 as.data.frame()
   
   print(human_activities_summary)
+  #or
+  write.table(human_activities_summary,file="run_analysis.txt",row.names = FALSE)
  
   
   
