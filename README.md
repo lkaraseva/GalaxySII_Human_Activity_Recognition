@@ -31,11 +31,15 @@ Below you can find a detailed description of how all of the scripts work.
   ```{r eval=FALSE}  
   names(X_test)<-features[,2]
   names(X_train)<-features[,2]
+  names(subject_test)<-"subject"
+  names(subject_train)<-"subject"
+  names(y_test)<-"activity"
+  names(y_train)<-"activity"
   ```
 > Binds data sets with the lables
   ```{r eval=FALSE}  
-  test_df<-cbind.data.frame(y_test, X_test)
-  train_df<-cbind.data.frame(y_train, X_train)
+  test_df<-cbind.data.frame(subject_test, y_test, X_test)
+  train_df<-cbind.data.frame(subject_train, y_train, X_train)
   test_and_train_df<-rbind.data.frame(test_df, train_df)
   ```    
 ## Step 2
@@ -44,11 +48,11 @@ Regular expressions are used within `grep` FUN to identify required variable, i.
 Returned vector was applied to `test_and_train_df` to filter out other variables. The resulting data frame named as `filtered_full_df1`.
 > Locates column numbers that contain mean or standard deviation measurements by exact match to `mean()` and `std()`
   ```{r eval=FALSE}  
-  required_columns_vector<-grep("V1|\\bmean()\\b|\\bstd()\\b", names(test_and_train_df),ignore.case = TRUE)
+  required_columns_vector<-grep("subject|activity|\\bmean()\\b|\\bstd()\\b", names(test_and_train_df),ignore.case = TRUE)
   ```
 > Creates a filterted data frame that contains only required columns/measurments
   ```{r eval=FALSE}  
-  filtered_full_df1<-full_df[,required_columns_vector]
+  filtered_full_df1<-test_and_train_df[,required_columns_vector]
   ```
 ## Step 3
 #### Uses descriptive activity names to name the activities in the data set
@@ -56,9 +60,10 @@ Returned vector was applied to `test_and_train_df` to filter out other variables
   ```{r eval=FALSE}
   library(dplyr)
   human_activities_full <- filtered_full_df1 %>%
-                            merge(activity_labels) %>%
-                            select(68,2:67) %>%
-                            rename(activity=V2)
+                            merge(activity_labels,by.x="activity",by.y="V1",all=TRUE) %>%
+                            select(2,69,3:68) %>%
+                            rename(activity=V2) %>%
+                            arrange(subject,activity)
   ```
 ## Step 4 
 #### Appropriately labels the data set with descriptive variable names
@@ -83,9 +88,11 @@ A series of editing actions was applied to variable names in `human_activities_f
 `human_activities_full` has been grouped by activity types. The data frame has been summarized by activity types using mean FUN. The resulting and final data frame was called `human_activities_summary`.
   ```{r eval=FALSE}
   human_activities_summary<- human_activities_full %>% 
-                              group_by(activity) %>%
-                              summarise_all(funs(mean(., na.rm=TRUE))) %>%
-                              as.data.frame()
+                group_by(subject, activity) %>%
+                summarise_all(funs(mean(., na.rm=TRUE))) %>%
+                as.data.frame()
   
   print(human_activities_summary)
+  #or
+  write.table(human_activities_summary,file="run_analysis.txt",row.names = FALSE)
   ```
